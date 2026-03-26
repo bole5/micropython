@@ -1,28 +1,57 @@
-name: Build ESP32_GENERIC NOBLE
+name: Build ESP32_GENERIC NOBLE (noBLE)
 
 on:
   push:
+    branches: ["**"]
     paths:
-      - 'ports/esp32/boards/ESP32_GENERIC/**'
-  workflow_dispatch:  # manual trigger from Actions tab
+      - "ports/esp32/**"
+      - "mpy-cross/**"
+      - ".github/workflows/build-noble.yml"
+  pull_request:
+    paths:
+      - "ports/esp32/**"
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - uses: espressif/esp-idf-ci-action@v1
-        with:
-          esp_idf_version: v5.2.2
-          command: |
-            make -C mpy-cross
-            make -C ports/esp32 submodules
-            make -C ports/esp32 BOARD=ESP32_GENERIC BOARD_VARIANT=NOBLE
+      - name: Clone ESP-IDF v5.2.2
+        run: |
+          git clone --depth 1 --branch v5.2.2 https://github.com/espressif/esp-idf.git
+          git -C esp-idf submodule update --init --recursive --filter=tree:0
+          ./esp-idf/install.sh
 
-      - uses: actions/upload-artifact@v4
+      - name: Build mpy-cross
+        run: |
+          source esp-idf/export.sh
+          make -j$(nproc) -C mpy-cross
+
+      - name: Fetch ESP32 port submodules
+        run: |
+          source esp-idf/export.sh
+          make -j$(nproc) -C ports/esp32 submodules
+
+      - name: Clean stale lock files
+        run: rm -f ports/esp32/lockfiles/*.lock.*
+
+      - name: Build ESP32_GENERIC NOBLE variant
+        run: |
+          source esp-idf/export.sh
+          make -j$(nproc) -C ports/esp32 BOARD=ESP32_GENERIC BOARD_VARIANT=NOBLE
+
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: ESP32_GENERIC-NOBLE-firmware
-          path: ports/esp32/build-ESP32_GENERIC-NOBLE/firmware.bin
+          name: ESP32_GENERIC-NOBLE-${{ github.sha }}
+          path: |
+            ports/esp32/build-ESP32_GENERIC-NOBLE/firmware.bin
+            ports/esp32/build-ESP32_GENERIC-NOBLE/micropython.bin
+          if-no-files-found: error
+          retention-days: 30
