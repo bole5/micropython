@@ -3,3 +3,19 @@ CONFIG_BT_ENABLED=n
 CONFIG_BT_NIMBLE_ENABLED=n
 CONFIG_BTDM_CTRL_MODE_NBLE=n
 CONFIG_BT_BLUEDROID_ENABLED=n
+
+# --- USB (not needed, saves ~50KB flash) ---
+CONFIG_ESP_CONSOLE_USB_CDC=n
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=n
+
+# --- IPv6 (use IPv4) ---
+CONFIG_LWIP_IPV6=n
+
+# --- mDNS (not used) ---
+CONFIG_MDNS_ENABLED=n
+
+# --- WPA3 enterprise (home WiFi only) ---
+CONFIG_ESP_WIFI_ENTERPRISE_SUPPORT=n
+
+# --- Console: switch to UART only (saves RAM) ---
+CONFIG_ESP_CONSOLE_UART_DEFAULT=y
