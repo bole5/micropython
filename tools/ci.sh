@@ -274,6 +274,10 @@ function ci_esp32_build_noble {
 	
     ci_esp32_build_common
     make ${MAKEOPTS} -C ports/esp32 BOARD=ESP32_GENERIC BOARD_VARIANT=NOBLE
+	# Print size breakdown
+    python3 esp-idf/tools/idf_size.py \
+        --format table \
+        ports/esp32/build-ESP32_GENERIC-NOBLE/micropython.map
 }
 
 ########################################################################################
