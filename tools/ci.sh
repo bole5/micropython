@@ -268,8 +268,11 @@ function ci_esp32_build_p4 {
 }
 
 function ci_esp32_build_noble {
+   	# Full clean to prevent stale cmake cache carrying BLE settings
+    rm -rf ports/esp32/build-ESP32_GENERIC-NOBLE/
+    rm -f ports/esp32/lockfiles/*.lock.*
+	
     ci_esp32_build_common
-
     make ${MAKEOPTS} -C ports/esp32 BOARD=ESP32_GENERIC BOARD_VARIANT=NOBLE
 }
 
