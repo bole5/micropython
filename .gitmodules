@@ -75,8 +75,8 @@
 	path = lib/alif-security-toolkit
 	url = https://github.com/micropython/alif-security-toolkit.git
 [submodule "lib/mqtt_as"]
-    path = lib/mqtt_as
-    url = https://github.com/zcattacz/mqtt_as.git
+	path = lib/mqtt_as
+	url = https://github.com/zcattacz/mqtt_as.git
 [submodule "lib/microdot"]
-    path = lib/microdot
-    url = https://github.com/miguelgrinberg/microdot.git
+	path = lib/microdot
+	url = https://github.com/miguelgrinberg/microdot.git
