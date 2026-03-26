@@ -1,4 +1,4 @@
 set(SDKCONFIG_DEFAULTS
     boards/sdkconfig.base
-    boards/sdkconfig.noble
+    boards/ESP32_GENERIC/sdkconfig.noble
 )
