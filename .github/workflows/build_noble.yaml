@@ -1,12 +1,12 @@
-name: Build ESP32_GENERIC NOBLE (noBLE)
+name: ESP32_GENERIC NOBLE (noBLE)
 
 on:
   push:
-    branches: ["**"]
     paths:
+      - ".github/workflows/build-noble.yml"
+      - "tools/ci.sh"
       - "ports/esp32/**"
       - "mpy-cross/**"
-      - ".github/workflows/build-noble.yml"
   pull_request:
     paths:
       - "ports/esp32/**"
@@ -15,43 +15,36 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Read the ESP-IDF version
+        id: idf_ver
+        run: source tools/ci.sh && echo "IDF_VER=$IDF_VER" | tee "$GITHUB_OUTPUT"
+
+      - name: Cache ESP-IDF
+        id: cache_esp_idf
+        uses: actions/cache@v4
         with:
-          submodules: recursive
+          path: ~/.espressif
+          key: esp-idf-${{ steps.idf_ver.outputs.IDF_VER }}
 
-      - name: Clone ESP-IDF v5.2.2
-        run: |
-          git clone --depth 1 --branch v5.2.2 https://github.com/espressif/esp-idf.git
-          git -C esp-idf submodule update --init --recursive --filter=tree:0
-          ./esp-idf/install.sh
+      - name: Install ESP-IDF
+        if: steps.cache_esp_idf.outputs.cache-hit != 'true'
+        run: source tools/ci.sh && ci_esp32_idf_setup
 
-      - name: Build mpy-cross
-        run: |
-          source esp-idf/export.sh
-          make -j$(nproc) -C mpy-cross
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: esp32-noble
 
-      - name: Fetch ESP32 port submodules
-        run: |
-          source esp-idf/export.sh
-          make -j$(nproc) -C ports/esp32 submodules
+      - name: Build ESP32_GENERIC NOBLE
+        run: source tools/ci.sh && ci_esp32_build_noble
 
-      - name: Clean stale lock files
-        run: rm -f ports/esp32/lockfiles/*.lock.*
-
-      - name: Build ESP32_GENERIC NOBLE variant
-        run: |
-          source esp-idf/export.sh
-          make -j$(nproc) -C ports/esp32 BOARD=ESP32_GENERIC BOARD_VARIANT=NOBLE
-
-      - name: Upload firmware artifact
+      - name: Upload firmware
         uses: actions/upload-artifact@v4
         with:
           name: ESP32_GENERIC-NOBLE-${{ github.sha }}
-          path: |
-            ports/esp32/build-ESP32_GENERIC-NOBLE/firmware.bin
-            ports/esp32/build-ESP32_GENERIC-NOBLE/micropython.bin
+          path: ports/esp32/build-ESP32_GENERIC-NOBLE/firmware.bin
           if-no-files-found: error
           retention-days: 30
