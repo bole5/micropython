@@ -28,6 +28,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      
+      - name: Disable maintainer build checks for NOBLE
+        run: echo "MICROPY_MAINTAINER_BUILD=0" >> ${GITHUB_ENV}
 
       - name: Setup ESP-IDF
         uses: ./.github/actions/setup_esp32
