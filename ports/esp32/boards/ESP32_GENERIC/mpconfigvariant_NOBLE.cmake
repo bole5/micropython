@@ -2,6 +2,14 @@
 set(MICROPY_PY_BLUETOOTH 0 CACHE BOOL "" FORCE)
 set(MICROPY_BLUETOOTH_NIMBLE 0 CACHE BOOL "" FORCE)
 
+# Keep SSL — needed for HTTPS requests
+set(MICROPY_PY_SSL 1)
+set(MICROPY_SSL_MBEDTLS 1)
+
+# But no need for server-side SSL in MicroPython
+# (TinyServer runs plain HTTP)
+set(MICROPY_SSL_AXTLS 0)
+
 # *** Critical: force compile definitions to override ESP32_GENERIC defaults ***
 # Appending AFTER board cmake means these win over any -DMICROPY_PY_BLUETOOTH=1
 list(APPEND MICROPY_DEF_BOARD
