@@ -77,8 +77,6 @@
 [submodule "lib/mqtt_as"]
     path = lib/mqtt_as
     url = https://github.com/zcattacz/mqtt_as.git
-    branch = master
 [submodule "lib/microdot"]
     path = lib/microdot
     url = https://github.com/miguelgrinberg/microdot.git
-    branch = main
