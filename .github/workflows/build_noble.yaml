@@ -1,38 +1,28 @@
-name: Build ESP32 NOBLE firmware
+name: Build ESP32_GENERIC NOBLE
 
 on:
   push:
     paths:
       - 'ports/esp32/boards/ESP32_GENERIC/**'
-      - '.github/workflows/build-noble.yml'
-  workflow_dispatch:   # allows manual trigger from the UI
+  workflow_dispatch:  # manual trigger from Actions tab
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          submodules: recursive   # required — esp-idf is a submodule
+          submodules: recursive
 
-      - name: Build mpy-cross
-        run: make -C mpy-cross -j4
-
-      - name: Install esp-idf dependencies
-        run: |
-          cd ports/esp32
-          make BOARD=ESP32_GENERIC BOARD_VARIANT=NOBLE submodules
-
-      - name: Build firmware
-        run: |
-          cd ports/esp32
-          make BOARD=ESP32_GENERIC BOARD_VARIANT=NOBLE -j4
-
-      - name: Upload firmware
-        uses: actions/upload-artifact@v4
+      - uses: espressif/esp-idf-ci-action@v1
         with:
-          name: esp32-noble-${{ github.sha }}
+          esp_idf_version: v5.2.2
+          command: |
+            make -C mpy-cross
+            make -C ports/esp32 submodules
+            make -C ports/esp32 BOARD=ESP32_GENERIC BOARD_VARIANT=NOBLE
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ESP32_GENERIC-NOBLE-firmware
           path: ports/esp32/build-ESP32_GENERIC-NOBLE/firmware.bin
-          retention-days: 30
