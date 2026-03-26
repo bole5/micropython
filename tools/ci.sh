@@ -268,7 +268,12 @@ function ci_esp32_build_p4 {
 }
 
 function ci_esp32_build_noble {
-   	# Full clean to prevent stale cmake cache carrying BLE settings
+	export MICROPY_MAINTAINER_BUILD=0
+
+    # Initialize only your custom submodules explicitly
+    git submodule update --init lib/mqtt_as lib/microdot
+
+    # Clean stale state
     rm -rf ports/esp32/build-ESP32_GENERIC-NOBLE/
     rm -f ports/esp32/lockfiles/*.lock.*
 	
