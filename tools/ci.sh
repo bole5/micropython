@@ -267,7 +267,7 @@ function ci_esp32_build_p4 {
     make ${MAKEOPTS} -C ports/esp32 BOARD=ESP32_GENERIC_P4 BOARD_VARIANT=C6_WIFI
 }
 
-function ci_esp32_generic_noble {
+function ci_esp32_build_noble {
     ci_esp32_build_common
 
     make ${MAKEOPTS} -C ports/esp32 BOARD=ESP32_GENERIC BOARD_VARIANT=NOBLE
