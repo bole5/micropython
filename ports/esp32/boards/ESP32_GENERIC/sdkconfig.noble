@@ -17,5 +17,22 @@ CONFIG_MDNS_ENABLED=n
 # --- WPA3 enterprise (home WiFi only) ---
 CONFIG_ESP_WIFI_ENTERPRISE_SUPPORT=n
 
+# Keep TLS client support (needed for weather forecast HTTPS)
+CONFIG_ESP_TLS_USING_MBEDTLS=y
+CONFIG_MBEDTLS_TLS_CLIENT_ONLY=y    # client only, no server TLS stack
+
+# Strip the large built-in certificate bundle (~100KB) —
+# your app skips cert validation anyway
+CONFIG_MBEDTLS_CERTIFICATE_BUNDLE=n
+CONFIG_ESP_TLS_INSECURE=y
+CONFIG_ESP_TLS_SKIP_SERVER_CERT_VERIFY=y
+
+# Disable server-side TLS (you serve plain HTTP via TinyServer)
+CONFIG_MBEDTLS_TLS_SERVER=n
+
+# Remove cipher suites you don't need
+CONFIG_MBEDTLS_RC4_DISABLED=y
+CONFIG_MBEDTLS_3DES_DISABLED=y
+
 # --- Console: switch to UART only (saves RAM) ---
 CONFIG_ESP_CONSOLE_UART_DEFAULT=y
