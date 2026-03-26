@@ -3,43 +3,40 @@ name: ESP32_GENERIC NOBLE (noBLE)
 on:
   push:
     paths:
-      - ".github/workflows/build-noble.yml"
-      - "tools/ci.sh"
-      - "ports/esp32/**"
-      - "mpy-cross/**"
+      - '.github/workflows/build-noble.yml'
+      - 'tools/**'
+      - 'py/**'
+      - 'extmod/**'
+      - 'shared/**'
+      - 'lib/**'
+      - 'drivers/**'
+      - 'ports/esp32/**'
   pull_request:
     paths:
-      - "ports/esp32/**"
+      - 'ports/esp32/**'
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  IDF_NEWEST_VER: "v5.3"
+
 jobs:
-  build:
+  build_noble:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - name: Read the ESP-IDF version
-        id: idf_ver
-        run: source tools/ci.sh && echo "IDF_VER=$IDF_VER" | tee "$GITHUB_OUTPUT"
-
-      - name: Cache ESP-IDF
-        id: cache_esp_idf
-        uses: actions/cache@v4
+      - name: Setup ESP-IDF
+        uses: ./.github/actions/setup_esp32
         with:
-          path: ~/.espressif
-          key: esp-idf-${{ steps.idf_ver.outputs.IDF_VER }}
+          idf_ver: ${{ env.IDF_NEWEST_VER }}
+          ccache_key: esp32_build_noble
 
-      - name: Install ESP-IDF
-        if: steps.cache_esp_idf.outputs.cache-hit != 'true'
-        run: source tools/ci.sh && ci_esp32_idf_setup
-
-      - name: ccache
-        uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          key: esp32-noble
-
-      - name: Build ESP32_GENERIC NOBLE
-        run: source tools/ci.sh && ci_esp32_build_noble
+      - name: Build esp32_build_noble
+        run: tools/ci.sh esp32_build_noble
 
       - name: Upload firmware
         uses: actions/upload-artifact@v4
