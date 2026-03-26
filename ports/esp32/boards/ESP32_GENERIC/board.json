@@ -19,6 +19,7 @@
     "thumbnail": "",
     "url": "https://www.espressif.com/en/products/modules",
     "variants": {
+        "NOBLE": "ESP32 NOBLE",
         "D2WD": "ESP32 D2WD",
         "SPIRAM": "Support for SPIRAM / WROVER",
         "UNICORE": "ESP32 Unicore",
