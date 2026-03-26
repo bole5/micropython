@@ -270,8 +270,9 @@ function ci_esp32_build_p4 {
 function ci_esp32_build_noble {
 	export MICROPY_MAINTAINER_BUILD=0
 
-    # Initialize only your custom submodules explicitly
-    git submodule update --init lib/mqtt_as lib/microdot
+    # Initialize custom submodules explicitly
+    git submodule update --init lib/mqtt_as
+	git submodule update --init lib/microdot
 
     # Clean stale state
     rm -rf ports/esp32/build-ESP32_GENERIC-NOBLE/
