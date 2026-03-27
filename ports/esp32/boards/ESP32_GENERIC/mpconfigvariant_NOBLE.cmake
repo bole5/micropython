@@ -7,7 +7,6 @@ set(MICROPY_PY_SSL 1)
 set(MICROPY_SSL_MBEDTLS 1)
 
 # But no need for server-side SSL in MicroPython
-# (TinyServer runs plain HTTP)
 set(MICROPY_SSL_AXTLS 0)
 
 # *** Critical: force compile definitions to override ESP32_GENERIC defaults ***
@@ -27,13 +26,6 @@ list(REMOVE_ITEM MICROPY_SOURCE_EXTMOD
 list(REMOVE_ITEM MICROPY_SOURCE_PORT
     ${MICROPY_PORT_DIR}/mpnimbleport.c
 )
-
-# sdkconfig: disable BT component in ESP-IDF
-set(SDKCONFIG_DEFAULTS
-    ${MICROPY_PORT_DIR}/boards/sdkconfig.base
-    ${MICROPY_PORT_DIR}/boards/sdkconfig.disable_ble
-)
-
 
 # Point to a sdkconfig that disables BLE in ESP-IDF
 set(SDKCONFIG_DEFAULTS
