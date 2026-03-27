@@ -279,6 +279,7 @@ function ci_esp32_build_noble {
     rm -f ports/esp32/lockfiles/*.lock.*
 	
     ci_esp32_build_common
+	make ${MAKEOPTS} -C ports/esp32 BOARD=ESP32_GENERIC BOARD_VARIANT=NOBLE clean
     make ${MAKEOPTS} -C ports/esp32 BOARD=ESP32_GENERIC BOARD_VARIANT=NOBLE
 	# Print size breakdown
     python3 esp-idf/tools/idf_size.py \
