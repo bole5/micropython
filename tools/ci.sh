@@ -272,7 +272,7 @@ function ci_esp32_build_noble {
 
     # Initialize custom submodules explicitly
     git submodule update --init lib/mqtt_as
-	git submodule update --init lib/microdot
+	# git submodule update --init lib/microdot
 
     # Clean stale state
     rm -rf ports/esp32/build-ESP32_GENERIC-NOBLE/
