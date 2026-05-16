@@ -7,7 +7,6 @@
     },
     "docs": "",
     "features": [
-        "BLE",
         "External Flash",
         "WiFi"
     ],
