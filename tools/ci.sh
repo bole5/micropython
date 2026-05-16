@@ -290,10 +290,10 @@ function ci_esp32_build_noble {
 	# Collect artifacts explicitly
     mkdir -p artifacts
 
-    cp ports/esp32/build-ESP32_GENERIC-NOBLE/micropython.bin \
+    cp ports/esp32/build-ESP32_GENERIC-NOBLE/firmware.bin \
         artifacts/micropython-ESP32_GENERIC-NOBLE.bin
 
-    cp ports/esp32/build-ESP32_GENERIC_C3/micropython.bin \
+    cp ports/esp32/build-ESP32_GENERIC_C3/firmware.bin \
         artifacts/micropython-ESP32_GENERIC_C3.bin
 		
 	# Print size breakdown
