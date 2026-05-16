@@ -45,6 +45,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ESP32_GENERIC-NOBLE-${{ github.sha }}
-          path: ports/esp32/build-ESP32_GENERIC-NOBLE/firmware.bin
+          path: artifacts/
+          # path: ports/esp32/build-ESP32_GENERIC-NOBLE/firmware.bin
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 5
